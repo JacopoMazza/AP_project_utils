@@ -107,6 +107,10 @@ sequenceDiagram
         P ->> E: Unavailable Energy Cells
     end
 
+    Note over O,E: Explorer Bag Content
+    O ->> E: Asks Explorer Bag Content
+    E ->> O: Explorer Current Bag Content
+
 
 
 ```
