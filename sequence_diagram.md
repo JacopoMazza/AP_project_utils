@@ -1,116 +1,241 @@
-# AP project sequence diagram
+# AP Project Sequence Diagrams
+
+
+## Planet Initialization
 
 ```mermaid
 sequenceDiagram
     participant O as Orchestrator
     participant P as Planet AI
+
+    O->>P: StartPlanetAI
+    P->>O: StartPlanetAIResult(planet_id, timestamp)
+```
+
+## Planet AI Stop
+
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
+    participant P as Planet AI
+
+    O->>P: StopPlanetAI
+    P->>O: StopPlanetAIResult(planet_id, timestamp)
+```
+
+## Sunray Interaction
+
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
+    participant P as Planet AI
+
+    O->>P: Sunray(Sunray)
+    P->>O: SunrayAck(planet_id, timestamp)
+```
+
+## Asteroid Defense Scenario
+
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
+    participant P as Planet AI
+
+    O->>P: Asteroid(Asteroid)
+    P->>O: AsteroidAck(planet_id, Option<Rocket>, timestamp)
+```
+
+## Internal State Discovery
+
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
+    participant P as Planet
+
+    O->>P: InternalStateRequest
+    P->>O: InternalStateResponse(planet_id, PlanetState, timestamp)
+```
+
+## Explorer Initialization
+
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
     participant E as Explorer
 
+    O->>E: StartExplorerAi
+    E->>O: StartExplorerAIResult(explorer_id, timestamp)
+```
 
-    %%Planet - Orchestrator (Debug Mode)
-    Note over O,P: Planet Initialization - Debug Mode
-    O->>P: Start Planet (Debug Mode)
-    P->>O: Started Planet in Debug Mode
-    
-    %%Planet - Orchestrator
-    Note over O,P: Planet Initialization
-    O->>P: Start Planet
-    P->>O: Started Planet
+## Stop Explorer
 
-    Note over O,P: Planet AI Stop
-    O->>P: Stop Planet AI
-    P->>O: AI Planet stopped
-    
-    Note over O,P: Planet AI Stop - (Debug Mode)
-    O->>P: Stop Planet AI - Debug Mode
-    P->>O: AI Planet stopped - Debug Mode
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
+    participant E as Explorer
 
-    Note over O,P: Sunray Interaction
-    O->>P: Sunray
-    P->>O: Sunray Ack
+    O->>E: StopExplorerAI
+    E->>O: StopExplorerAIResult(explorer_id, timestamp)
+```
 
-    Note over O,P: Asteroid Defense Scenario
-    O->>P: Asteroid
-    alt Has Rocket Defense
-        P->>O: Defended
-    else No Defense Available
-        P->>O: Destroyed
-    end
+## Neighbors discovery
 
-    %%Orchestrator - Explorer
-    Note over O,E: Explorer Initialization - Debug Mode
-    O->>E: Start Explorer (Debug Mode)
-    E->>O: Started Explorer in Debug Mode
-    
-    Note over O,E: Explorer Initialization
-    O->>E: Start Explorer
-    E->>O: Started Explorer
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant O as Orchestrator
 
-    Note over O,E: Stop Explorer - Debug Mode
-    O->>E: Stop Explorer (Debug Mode)
-    E->>O: Stopped Explorer in Debug Mode
-    
-    Note over O,E: Stop Explorer
-    O->>E: Stop Explorer
-    E->>O: Stopped Explorer
+    E->>O: NeighborsRequest(explorer_id, current_planet_id, timestamp)
+    O->>E: NeighborsResponse(Vec<planet_id>)
+```
 
-    %%Explorer - Planet
-    Note over E,P: Neighbors discovery
-    E->>P: Ask for neighbors
-    P->>E: Give back neighbors
+## Moving to another planet (Manually from Orch)
 
-    Note over E,O: Moving to another planet
-    E ->> O: MoveToPlanet(starting planet id, end planet id)
-    alt End id is in starting planet neighbors
-        O ->> E: Moved(newChannel)
-    else
-        O ->> E: NotMoved
-    end
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant O as Orchestrator
 
-    Note over E,P: Basic Resource discovery
-    E ->> P: Asks for available Basic Resources
-    alt Planet can craft basic resources
-        P ->> E: Available Basic Resources(resourceList)
-    else
-        P ->> E: Available Basic Resources(None)
-    end
+    O ->> E: MoveToPlanet(channel_of_new_planet)
+    E->> O: MovedToPlanetResult(explorer_id, timestamp)
+```
 
-    Note over E,P: Basic Resource crafting
-    E ->> P: Asks for crafting of Resource R (R is craftable by P)
-    alt Planet has available energy cells
-        P ->> E: Crafted Basic Resource(R)
-    else
-        P ->> E: Unavailable Energy Cells
-    end
+## Moving to another planet (Explorer Asks)
 
-    Note over E,P: Complex Resource Discovery
-    E ->> P: Asks for available Complex Resources recipes
-    alt Planet can craft complex Resources
-        P ->> E: Available complex Resources recipes(Complex_Resources_Recipes_List)
-    else
-        P ->> E: Available Complex Resources Recipes(None)
-    end
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant O as Orchestrator
 
-    Note over E,P: Complex Resource crafting
-    E ->> P: Asks for crafting of Complex Resource CR giving BR1 and BR2 (CR is craftable by P)
-    alt Planet has available energy cells and CR = BR1 + BR2
-        P ->> E: Crafted Complex Resource(CR)
-    else
-        P ->> E: Unavailable Energy Cells
-    end
+    E->>O: TravelToPlanet(explorer_id, start_planet_id, dst_planet_id)
+    O ->>E: MoveToPlanet(Option<channelof_new_planet>)
+     E->> O: MovedToPlanetResult(explorer_id, timestamp)
+```
+## Bag Content 
 
-    Note over E,P: Energy Cell Available
-    E ->> P: Asks for available energy cells
-    alt Planet has energy cells available
-        P ->> E: Available Energy Cells (either one or Vec<EnergyCells>)
-    else
-        P ->> E: Unavailable Energy Cells
-    end
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
+    participant E as Explorer
 
-    Note over O,E: Explorer Bag Content
-    O ->> E: Asks Explorer Bag Content
-    E ->> O: Explorer Current Bag Content
+    O->>E: BagContentRequest
+    E->>O: BagContentResponse(explorer_id, Box<dyn Bag>, timestamp)
+```
 
+## Basic Resource discovery(manually)
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant P as Planet AI
+    participant O as Orchestrator
 
+    O ->> E: SupportedResourceRequest
+    E ->> P: SupportedResourceRequest(explorer_id)
+    P ->> E: SupportedResourceResponse(resource_list)
+    E ->> O: SupportedResourceResponse(resource_list, explorer_id, timestamp)
+```
+## Combination Rules discovery(manually)
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant P as Planet AI
+    participant O as Orchestrator
+
+    O ->> E: SupportedCombinationRequest
+    E ->> P: SupportedCombinationRequest(explorer_id)
+    P ->> E: SupportedCombinationResponse(comb_list)
+    E ->> O: SupportedCombinationResponse(comb_list, explorer_id, timestamp)
+```
+## Basic Resource Generation(manually)
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant P as Planet AI
+    participant O as Orchestrator
+
+    O ->> E: GenerateResourceRequest(res_to_generate)
+    E ->> P: GenerateResourceRequest(explorer_id, res_to_generate)
+    P ->> E: GenerateResourceResponse(Option<BasicResource>)
+    E ->> O: GenerateResourceResponse(Option<BasicResource>, explorer_id, timestamp)
+```
+
+##  Resource Combination(manually)
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant P as Planet AI
+    participant O as Orchestrator
+
+    O ->> E: CombineResourceRequest(CombineResourceRequest)
+    E ->> P: CombineResourceRequest(CombineResourceRequest, explorer_id)
+    P ->> E: CombineResourceResponse(Option<ComplexResource>)
+    E ->> O: CombineResourceResponse(Option<ComplexResource>, explorer_id)
+```
+
+## Basic Resource discovery (from Explorer)
+
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant P as Planet AI
+
+    E ->> P: SupportedResourceRequest(explorer_id)
+    P ->> E: SupportedResourceResponse(resource_list)
+```
+
+## Combination Rules discovery(from Explorer)
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant P as Planet AI
+
+    E ->> P: SupportedCombinationRequest(explorer_id)
+    P ->> E: SupportedCombinationResponse(comb_list)
 
 ```
+
+## Basic Resource Generation (from Explorer)
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant P as Planet AI
+
+    E ->> P: GenerateResourceRequest(explorer_id, res_to_generate)
+    P ->> E: GenerateResourceResponse(Option<BasicResource>)
+```
+
+
+##  Resource Combination(from Explorer)
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant P as Planet AI
+
+    E ->> P: CombineResourceRequest(CombineResourceRequest, explorer_id)
+    P ->> E: CombineResourceResponse(Option<ComplexResource>)
+
+```
+
+## Energy Cell Availability
+
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant P as Planet AI
+
+    E->>P: AvailableEnergyCellRequest(explorer_id)
+    P->>E: AvailableEnergyCellResponse(available_cells_qty)
+```
+
+
+## Internal State Discovery (from Explorer)
+
+```mermaid
+sequenceDiagram
+    participant E as Explorer
+    participant P as Planet
+
+    E->>P: InternalStateRequest(explorer_id)
+    P->>E: InternalStateResponse(PlanetState)
+```
+
