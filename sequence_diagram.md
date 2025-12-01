@@ -102,7 +102,7 @@ sequenceDiagram
     O ->> newP: IncomingExplorerRequest(explorer_id, new_mpsc_sender)
     newP ->> O: IncomingExplorerResponse(planet_id, Result)
     O ->> currP: OutgoingExplorerRequest(explorer_id)
-    currP ->> O: OutgoingExplorerRequest(planet_id, move_curr_sender)
+    currP ->> O: OutgoingExplorerRequest(planet_id, Result)
 
     O ->>E: MoveToPlanet(channelof_new_planet)
     E->> O: MovedToPlanetResult(explorer_id, timestamp)
@@ -123,7 +123,7 @@ sequenceDiagram
     O ->> newP: IncomingExplorerRequest(explorer_id, new_mpsc_sender)
     newP ->> O: IncomingExplorerResponse(planet_id, Result)
     O ->> currP: OutgoingExplorerRequest(explorer_id)
-    currP ->> O: OutgoingExplorerRequest(planet_id, move_curr_sender)
+    currP ->> O: OutgoingExplorerRequest(planet_id, Result)
 
     O ->>E: MoveToPlanet(channelof_new_planet)
     E->> O: MovedToPlanetResult(explorer_id, timestamp)
