@@ -34,15 +34,33 @@ sequenceDiagram
     P->>O: SunrayAck(planet_id)
 ```
 
+## Planet is Killed
+this must always be handled, even if Planet is Stopped
+
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
+    participant P as Planet AI
+    
+    O->>P: KillPlanet
+    P->>O: KillPlanetResult(planet_id)
+```
+
 ## Asteroid Defense Scenario
 
 ```mermaid
 sequenceDiagram
     participant O as Orchestrator
     participant P as Planet AI
-
+    
     O->>P: Asteroid(Asteroid)
-    P->>O: AsteroidAck(planet_id, destroyed: bool)
+    alt Planet has Rocket
+    P->>O: AsteroidAck(planet_id, Some(Rocket))
+    else Planet does NOT have a Rocket
+    P->>O: AsteroidAck(planet_id,None)
+    O->>P: KillPlanet
+    P->>O: KillPlanetResult(planet_id)
+    end
 ```
 
 ## Internal State Discovery
