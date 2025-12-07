@@ -3,12 +3,12 @@
 This is an addendum of the official documentation aimed at aiding groups when implementing a planet.
 This is common crate's version 1.0
 
-If you are having issues with  migrating from a version prior to 1.0, please check  [Breaking changes in the last commit](https://github.com/lucaFiorini/AP_project_utils/main/planet_creation_handbook_1.md#breaking-changes-in-the-last-commit).
+If you are having issues with  migrating from a version prior to 1.0, please check  [Breaking changes in the last commit](https://github.com/lucaFiorini/AP_project_utils/blob/main/planet_creation_handbook_1.md#breaking-changes-in-the-last-commit).
 # Planet module 
 The `Planet` defined in the Common code provides the base for all implemented planets, it holds the internal state and handles the main execution loop of the planet.
 What groups need to build is the `PlanetAI`, this is defined as a Trait for you to implement in a library crate.
 A `dyn PlanetAI` object is used when constructing a `Planet`.
-The polling loop for messages is implemented in the common code, groups will only need to handle certain messages as listed below in [#An overlook of Planet Ai's methods](https://github.com/lucaFiorini/AP_project_utils/main/planet_creation_handbook_1.md#an-overlook-of-planet-ai's-methods)
+The polling loop for messages is implemented in the common code, groups will only need to handle certain messages as listed below in [#An overlook of Planet Ai's methods](https://github.com/lucaFiorini/AP_project_utils/blob/main/planet_creation_handbook_1.md#an-overlook-of-planet-ai's-methods)
 # What your Crate should look like
 
 Your crate should be very simple, it needs to:
@@ -68,7 +68,7 @@ When implementing these, you should resolve the request by sending expected resp
 > [!warning] 
 > This is subject to change depending on the outcome of [Issue 97](https://github.com/unitn-ap-2025/common/issues/97)
 
-Asteroids are not handled by [Message Handles](https://github.com/lucaFiorini/AP_project_utils/main/planet_creation_handbook_1.md#message-handles), they have a special method,`handle_asteroid`
+Asteroids are not handled by [Message Handles](https://github.com/lucaFiorini/AP_project_utils/blob/main/planet_creation_handbook_1.md#message-handles), they have a special method,`handle_asteroid`
 
 Within this function you are expected to extract a `Rocket` from the `PlanetState`.
 and return it if you have it available, otherwise return `None`.
@@ -78,7 +78,7 @@ When you return `None`, the common crate's `Planet` will send relevant messages 
 >[!warning] 
 > This is subject to change depending on the outcome of [Issue 97](https://github.com/unitn-ap-2025/common/issues/97)
 
-Planet Start and Planet Stop are not handled by [Message Handles](https://github.com/lucaFiorini/AP_project_utils/main/planet_creation_handbook_1.md#message-handles),they have a special methods, `start` and `stop`
+Planet Start and Planet Stop are not handled by [Message Handles](https://github.com/lucaFiorini/AP_project_utils/blob/main/planet_creation_handbook_1.md#message-handles),they have a special methods, `start` and `stop`
 
 They allow you to change your AI's internal state when the planet starts or stops.
 
