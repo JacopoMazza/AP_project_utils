@@ -8,7 +8,7 @@ If you are having issues with  migrating from a version prior to 1.0, please che
 The `Planet` defined in the Common code provides the base for all implemented planets, it holds the internal state and handles the main execution loop of the planet.
 What groups need to build is the `PlanetAI`, this is defined as a Trait for you to implement in a library crate.
 A `dyn PlanetAI` object is used when constructing a `Planet`.
-The polling loop for messages is implemented in the common code, groups will only need to handle certain messages as listed below in [#An overlook of Planet Ai's methods](https://github.com/lucaFiorini/AP_project_utils/blob/main/planet_creation_handbook_1.md#an-overlook-of-planet-ai's-methods)
+The polling loop for messages is implemented in the common code, groups will only need to handle certain messages as listed below in [An overlook of Planet Ai's methods](https://github.com/lucaFiorini/AP_project_utils/blob/main/planet_creation_handbook_1.md##an-overlook-of-planet-ai's-methods)
 # What your Crate should look like
 
 Your crate should be very simple, it needs to:
