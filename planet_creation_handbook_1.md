@@ -1,7 +1,7 @@
 # Planet construction handbook 1
 
 This is an addendum of the official documentation aimed at aiding groups when implementing a planet.
-This is common crate's version 1.0
+This is written for common crate's version 1.0
 
 If you are having issues with  migrating from a version prior to 1.0, please check  [Breaking changes in the last commit](https://github.com/lucaFiorini/AP_project_utils/blob/main/planet_creation_handbook_1.md#breaking-changes-in-the-last-commit).
 # Planet module 
