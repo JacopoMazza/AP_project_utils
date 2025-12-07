@@ -90,7 +90,8 @@ They allow you to change your AI's internal state when the planet starts or stop
 >The common code will automatically reply with `Stopped` whenever the planet is stopped for specific messages.
 
 # Breaking changes in the last commit.
-This section is for those who had implemented a working planet before the last commit
+This section is for those who had implemented a working planet before the last commit which merged this [PR](https://github.com/unitn-ap-2025/common/pull/95).
+
 It introduced a few breaking changes.
 Specifically:
 - library for Senders and Receivers has changed
