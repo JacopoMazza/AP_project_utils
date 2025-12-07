@@ -82,7 +82,7 @@ Asteroids are not handled by [Message Handles](https://github.com/lucaFiorini/AP
 Within this function you are expected to extract a `Rocket` from the `PlanetState`.
 and return it if you have it available, otherwise return `None`.
 I.E. you should `take` the `Rocket` from `PlanetState`.
-When you return `None`, the common crate's `Planet` will send relevant messages to the `Orchestrator`.
+After you return, depending on the return value, the common crate's `Planet` will send relevant messages to the `Orchestrator`.
 ### Planet Start and Planet Stop
 >[!warning] 
 > This is subject to change depending on the outcome of [Issue 97](https://github.com/unitn-ap-2025/common/issues/97)
