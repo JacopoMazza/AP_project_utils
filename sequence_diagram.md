@@ -81,10 +81,20 @@ sequenceDiagram
     participant O as Orchestrator
     participant E as Explorer
 
-    O->>E: StartExplorerAi
+    O->>E: StartExplorerAI
     E->>O: StartExplorerAIResult(explorer_id)
 ```
 
+## Reset Explorer
+
+```mermaid
+sequenceDiagram
+    participant O as Orchestrator
+    participant E as Explorer
+
+    O->>E: ResetExplorerAI
+    E->>O: ResetExplorerAIResult(explorer_id)
+```
 ## Stop Explorer
 
 ```mermaid
@@ -117,7 +127,7 @@ sequenceDiagram
     participant currP as Current Planet
 
 
-    O ->> newP: IncomingExplorerRequest(explorer_id, new_mpsc_sender)
+    O ->> newP: IncomingExplorerRequest(explorer_id, new_sender)
     newP ->> O: IncomingExplorerResponse(planet_id, Result)
     O ->> currP: OutgoingExplorerRequest(explorer_id)
     currP ->> O: OutgoingExplorerRequest(planet_id, Result)
@@ -138,7 +148,7 @@ sequenceDiagram
 
 
     E->>O: TravelToPlanet(explorer_id, start_planet_id, dst_planet_id)
-    O ->> newP: IncomingExplorerRequest(explorer_id, new_mpsc_sender)
+    O ->> newP: IncomingExplorerRequest(explorer_id, new_sender)
     newP ->> O: IncomingExplorerResponse(planet_id, Result)
     O ->> currP: OutgoingExplorerRequest(explorer_id)
     currP ->> O: OutgoingExplorerRequest(planet_id, Result)
@@ -191,7 +201,11 @@ sequenceDiagram
     O ->> E: GenerateResourceRequest(res_to_generate)
     E ->> P: GenerateResourceRequest(explorer_id, res_to_generate)
     P ->> E: GenerateResourceResponse(Option<BasicResource>)
-    E ->> O: GenerateResourceResponse(Option<BasicResource>, explorer_id, timestamp)
+    alt Resource is generated
+    E ->> O: GenerateResourceResponse(Ok(), explorer_id)
+    else Resource is not generated
+    E ->> O: GenerateResourceResponse(Err(String), explorer_id)
+    end
 ```
 
 ##  Resource Combination(manually)
@@ -203,8 +217,11 @@ sequenceDiagram
 
     O ->> E: CombineResourceRequest(CombineResourceRequest)
     E ->> P: CombineResourceRequest(CombineResourceRequest, explorer_id)
-    P ->> E: CombineResourceResponse(Result<ComplexResource, (String, Resource1, Resource2)>)
-    E ->> O: CombineResourceResponse(Result, explorer_id)
+    alt Resource is generated
+    E ->> O: GenerateResourceResponse(Ok(), explorer_id)
+    else Resource is not generated
+    E ->> O: GenerateResourceResponse(Err(String), explorer_id)
+    end
 ```
 
 ## Basic Resource discovery (from Explorer)
@@ -247,7 +264,12 @@ sequenceDiagram
     participant P as Planet AI
 
     E ->> P: CombineResourceRequest(CombineResourceRequest, explorer_id)
-    P ->> E: CombineResourceResponse(Result<ComplexResource, (String, Resource1, Resource2)>)
+    alt Complex Resource is generated
+    P ->> E: CombineResourceResponse(Ok(ComplexResource))
+    else Complex Resource is not generated
+    P ->> E: CombineResourceResponse(Err((String, Resource1, Resource2)))
+    end
+
 
 ```
 
